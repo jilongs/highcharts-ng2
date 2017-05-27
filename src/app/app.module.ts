@@ -7,21 +7,20 @@ import { AppComponent } from './app.component';
 import { EventBusService } from './services/eventbus.service';
 import { PinEventCountComponent } from './reports/pin-event-count/components/pin-event-count/pin-event-count.component';
 import {PinEventCountChartDirective} from "./reports/pin-event-count/directives/pin-event-count-chart/pin-event-count-chart.directive";
-import {HighchartsService, HighchartsStatic} from "./reports/pin-event-count/components/eadp-chart/highchart.service";
-import {ChartModule} from "./reports/pin-event-count/components/eadp-chart/index";
+import {EADPCommonChartComponent} from "./reports/pin-event-count/components/eadp-chart/eadp-chart.component";
 @NgModule({
     declarations: [
         AppComponent,
         PinEventCountComponent,
         PinEventCountChartDirective,
+      EADPCommonChartComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
-        HttpModule,
-      ChartModule.forRoot(require('highcharts'))
+        HttpModule
     ],
-    providers: [EventBusService, HighchartsService, HighchartsStatic],
+    providers: [EventBusService ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

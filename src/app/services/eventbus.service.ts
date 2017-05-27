@@ -3,11 +3,14 @@ import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
+import {isUndefined} from "util";
 
 //https://blog.lacolaco.net/post/event-broadcasting-in-angular-2/
 interface BroadcastEvent {
     key: string;
     data?: any;
+  target?: string;
+  source?: string;
 }
 
 @Injectable()
@@ -18,13 +21,15 @@ export class EventBusService {
         this._eventBus = new Subject<BroadcastEvent>();
     }
 
-    emit(key:any, data?:any) {
-        this._eventBus.next({key, data});
+    emit(key:string, data?:any, target?:string, source?:string) {
+        this._eventBus.next({key,  data, target, source});
     }
 
-    on(key:string):Observable<string> {
+    on(key:string, target?:string):Observable<any> {
         return this._eventBus.asObservable()
             .filter(event => event.key === key)
-            .map(event => event.data);
+            .filter(event => event.target === target || isUndefined(target))
+            .map(event => event);
     }
+
 }
