@@ -6,10 +6,32 @@ import {ChartType} from "./constants";
 export class Series {
   name:string;
   color:string;
-  data: number[];
+
   index: number;
   zIndex: number;
   type: ChartType;
+  format():Object{
+    var seriesObject = {};
+    if(this.color){
+      seriesObject['color'] = this.color;
+    }
+    if(this.name){
+      seriesObject['name'] = this.name;
+    }
+    if(this.index){
+      seriesObject['index'] = this.index;
+    }
+    if(this.zIndex){
+      seriesObject['zIndex'] = this.zIndex;
+    }
+    if(this.type){
+      seriesObject['type'] = this.type;
+    }
+    return seriesObject;
+  }
+}
+export class BasicSeries extends Series{
+  data: number[];
   format():Object{
     var seriesObject = {};
     if(this.color){
@@ -33,13 +55,8 @@ export class Series {
     return seriesObject;
   }
 }
-export class TimeSeries {
-  name:string;
-  color:string;
+export class TimeSeries extends Series{
   data: number[][];
-  index: number;
-  zIndex: number;
-  type: ChartType;
   format():Object{
     var seriesObject = { };
     if(this.color){

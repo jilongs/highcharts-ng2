@@ -8,7 +8,7 @@ import {initChart} from './initChart';
 import {createBaseOpts} from './createBaseOpts';
 import {XAxis} from "./XAxis";
 import {YAxis} from "./YAxis";
-import {Series} from "./Series";
+import {Series, BasicSeries, TimeSeries} from "./Series";
 import {RangeSelector} from "./RangeSelector";
 import {
   updateXAxis, updateYAxis, updateRangeSelector, setSeries, resetXAxis,
@@ -21,7 +21,6 @@ import {ChartType, RenderType} from "./constants";
   providers: [HighchartsService]
 })
 export class EADPCommonChartComponent implements OnInit {
-  @Input() renderType?: RenderType = RenderType.HIGHCHARTS;
   @Input() chartType?: ChartType = ChartType.line;
   @Input() series?: Series[];
   @Input() xAxis?: XAxis[];
@@ -29,6 +28,7 @@ export class EADPCommonChartComponent implements OnInit {
   @Input() chartTitle?: string;
   @Input() rangeSelector?: RangeSelector;
 
+  private renderType?: RenderType = RenderType.HIGHCHARTS;
   private chart: any;
   private element: any;
   private type: string = 'Chart';
@@ -47,9 +47,11 @@ export class EADPCommonChartComponent implements OnInit {
   }
 
   checkType(){
-    if(this.renderType === RenderType.HIGHCHARTS){
+    if(this.series instanceof BasicSeries){
+      this.renderType = RenderType.HIGHCHARTS;
       this.type = 'Chart';
-    }else if(this.renderType === RenderType.HIGHSTOCK){
+    }else if(this.series instanceof TimeSeries){
+      this.renderType = RenderType.HIGHSTOCK;
       this.type = 'StockChart';
     }else{
       this.type = 'Chart';
