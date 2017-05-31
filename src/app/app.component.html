@@ -3,7 +3,11 @@
 <!--</h1>-->
 
 <!--<ga-pin-event-count></ga-pin-event-count>-->
-<eadp-chart [chartTitle]="'Basic Chart'" [xAxis]="xAxis"  [series]="series" [chartType]="chartType" ></eadp-chart>
-<eadp-chart [chartTitle]="'PieChart'" [series]="pieSeries" [chartType]="pieChartType" ></eadp-chart>
+<eadp-chart [(id)]="basicID" [chartTitle]="'Basic Chart'" [xAxis]="xAxis"  [series]="series" [chartType]="chartType" ></eadp-chart>
+<eadp-chart [(id)]="pieID" [chartTitle]="'Pie Chart'" [series]="pieSeries" [chartType]="pieChartType" ></eadp-chart>
+<eadp-chart [(id)]="tsID" [chartTitle]="'Time series chart'" [series]="tsSereis" [chartType]="tsChartType" ></eadp-chart>
 
+<pre>{{basicID}}</pre>
+<pre>{{tsChartType}}</pre>
+<pre>{{tsID}}</pre>
 <button (click)="onClickApply()">Apply</button>

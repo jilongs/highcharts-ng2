@@ -27,6 +27,18 @@ export class EADPCommonChartComponent implements OnInit {
   @Input() yAxis?: YAxis[];
   @Input() chartTitle?: string;
   @Input() rangeSelector?: RangeSelector;
+  @Output() idChange = new EventEmitter<string>();
+
+  idValue?: string;
+  @Input()
+  get id(){
+    return this.idValue;
+  }
+
+  set id(val){
+    this.idValue = val;
+    this.idChange.emit(this.idValue);
+  }
 
   private renderType?: RenderType = RenderType.HIGHCHARTS;
   private chart: any;
@@ -35,9 +47,11 @@ export class EADPCommonChartComponent implements OnInit {
 
 
   ngOnInit() {
-    this.checkType();
+    this.checkID();
+    this.checkSeriesType();
     this.highchartsService.init(this.renderType);
     this.baseOpts = createBaseOpts(null, this.element.nativeElement, this.highchartsService);
+    this.checkCharType();
     resetXAxis(this.baseOpts, this.xAxis);
     resetYAxis(this.baseOpts, this.yAxis);
     resetRangeSelector(this.baseOpts, this.rangeSelector);
@@ -47,7 +61,22 @@ export class EADPCommonChartComponent implements OnInit {
     this.init();
   }
 
-  checkType(){
+  checkID(){
+    console.log(this.id);
+    if(!this.id){
+      this.id = ('eadp-chart' + Math.floor(Math.random() * 1000) );
+      console.log(this.id);
+    }
+  }
+  checkCharType(){
+    if (this.renderType == RenderType.HIGHSTOCK){
+      this.baseOpts.useHighStocks = true;
+    }else{
+      this.baseOpts.useHighStocks = false;
+    }
+  }
+
+  checkSeriesType(){
     if(this.series instanceof TimeSeries){
       this.renderType = RenderType.HIGHSTOCK;
       this.type = 'StockChart';
@@ -59,7 +88,7 @@ export class EADPCommonChartComponent implements OnInit {
 
 
   registerBroadcastHandler() {
-    this.eventBus.on('eadp-chart.addSeries')
+    this.eventBus.on('eadp-chart.addSeries', this.id)
       .subscribe(event => {
         console.log(event);
         console.log(this.chart);
@@ -70,14 +99,12 @@ export class EADPCommonChartComponent implements OnInit {
         //   chart.scroller.setBaseSeries();
         // }
       });
-    this.eventBus.on('eadp-chart.render')
+    this.eventBus.on('eadp-chart.render', this.id)
       .subscribe(event => {
 
-        // Object.keys(event)
-        // chart.addSeries(event.data, true);
-        // if (chart.scroller.baseSeries) {
-        //   chart.scroller.setBaseSeries();
-        // }
+        setSeries(this.baseOpts, event.data);
+        this.init();
+        console.log(this.chart);
       });
   }
 
@@ -85,7 +112,7 @@ export class EADPCommonChartComponent implements OnInit {
   private baseOpts: any;
 
   private init() {
-    console.log(typeof this.xAxis);
+    console.log('init chart');
     this.chart = initChart(this.highchartsService, this.baseOpts, this.type);
     this.registerBroadcastHandler();
   }

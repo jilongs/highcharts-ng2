@@ -25,10 +25,11 @@ export class EventBusService {
         this._eventBus.next({key,  data, target, source});
     }
 
-    on(key:string, target?:string):Observable<any> {
+    on(key:string, target?:string, source?:string):Observable<any> {
         return this._eventBus.asObservable()
             .filter(event => event.key === key)
             .filter(event => event.target === target || isUndefined(target))
+            .filter(event => event.source === source || isUndefined(source))
             .map(event => event);
     }
 

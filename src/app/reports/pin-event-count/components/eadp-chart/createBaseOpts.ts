@@ -165,7 +165,8 @@ export function createBaseOpts(chartCmp, element, highchartsService : Highcharts
 
     credits: {
       enabled: false
-    }
+    },
+    useHighStocks: false
   } ;
   if (chartCmp) {
     chartEvents.forEach(function (eventName) {
