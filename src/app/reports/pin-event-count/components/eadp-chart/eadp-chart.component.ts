@@ -36,7 +36,8 @@ export class EADPCommonChartComponent implements OnInit {
 
   ngOnInit() {
     this.checkType();
-    this.baseOpts = createBaseOpts(null, this.element.nativeElement);
+    this.highchartsService.init(this.renderType);
+    this.baseOpts = createBaseOpts(null, this.element.nativeElement, this.highchartsService);
     resetXAxis(this.baseOpts, this.xAxis);
     resetYAxis(this.baseOpts, this.yAxis);
     resetRangeSelector(this.baseOpts, this.rangeSelector);
@@ -47,13 +48,11 @@ export class EADPCommonChartComponent implements OnInit {
   }
 
   checkType(){
-    if(this.series instanceof BasicSeries){
-      this.renderType = RenderType.HIGHCHARTS;
-      this.type = 'Chart';
-    }else if(this.series instanceof TimeSeries){
+    if(this.series instanceof TimeSeries){
       this.renderType = RenderType.HIGHSTOCK;
       this.type = 'StockChart';
     }else{
+      this.renderType = RenderType.HIGHCHARTS;
       this.type = 'Chart';
     }
   }
@@ -86,7 +85,6 @@ export class EADPCommonChartComponent implements OnInit {
   private baseOpts: any;
 
   private init() {
-    this.highchartsService.init(this.renderType);
     console.log(typeof this.xAxis);
     this.chart = initChart(this.highchartsService, this.baseOpts, this.type);
     this.registerBroadcastHandler();

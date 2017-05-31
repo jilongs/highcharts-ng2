@@ -3,6 +3,7 @@
 <!--</h1>-->
 
 <!--<ga-pin-event-count></ga-pin-event-count>-->
-<eadp-chart [xAxis]="xAxis"  [series]="series" [chartType]="chartType" ></eadp-chart>
+<eadp-chart [chartTitle]="'Basic Chart'" [xAxis]="xAxis"  [series]="series" [chartType]="chartType" ></eadp-chart>
+<eadp-chart [chartTitle]="'PieChart'" [series]="pieSeries" [chartType]="pieChartType" ></eadp-chart>
 
 <button (click)="onClickApply()">Apply</button>

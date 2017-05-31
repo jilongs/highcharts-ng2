@@ -81,6 +81,7 @@ export function setChartType(options, chartType: ChartType){
 
 export function setChartTitle(options, chartTitle: string){
   if(chartTitle){
-    options.title = chartTitle;
+    options.title.text = chartTitle;
   }
 }
+

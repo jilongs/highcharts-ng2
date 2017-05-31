@@ -1,5 +1,6 @@
 import {EventEmitter} from '@angular/core';
 import {ChartEvent} from './ChartEvent';
+import {HighchartsService} from "./HighchartsService";
 
 const chartEvents = [
   //'click', works by default as a native DOM click
@@ -65,7 +66,8 @@ export const defaultRangeSelector = {
   }
 };
 
-export function createBaseOpts(chartCmp, element) {
+export function createBaseOpts(chartCmp, element, highchartsService : HighchartsService) {
+  const Highcharts = highchartsService.getHighchartsStatic();
   let opts = {
     chart: {
       renderTo: element,
@@ -82,7 +84,9 @@ export function createBaseOpts(chartCmp, element) {
       enabled: false
     },
 
-    title: {},
+    title: {
+      text: null
+    },
     subtitle: {},
     plotOptions: {
       line: {
@@ -115,6 +119,18 @@ export function createBaseOpts(chartCmp, element) {
             // }
           }
         }
+      },
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+        dataLabels: {
+          enabled: true,
+          format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+          style: {
+            color: (Highcharts['theme'] && Highcharts['theme']['contrastTextColor']) || 'black'
+          }
+        },
+        showInLegend: true
       }
 
     },
@@ -134,7 +150,7 @@ export function createBaseOpts(chartCmp, element) {
     xAxis: [defaultXAxis],
     yAxis: [defaultYAxis],
     legend: {
-      enabled: false
+      enabled: true
     },
     rangeSelector: defaultRangeSelector,
 
