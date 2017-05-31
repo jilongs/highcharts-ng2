@@ -8,7 +8,7 @@ import {initChart} from './initChart';
 import {createBaseOpts} from './createBaseOpts';
 import {XAxis} from "./XAxis";
 import {YAxis} from "./YAxis";
-import {Series, BasicSeries, TimeSeries} from "./Series";
+import {Series, BasicSeries, TimeSeries, PieSeries} from "./Series";
 import {RangeSelector} from "./RangeSelector";
 import {
   updateXAxis, updateYAxis, updateRangeSelector, setSeries, resetXAxis,
@@ -48,6 +48,11 @@ export class EADPCommonChartComponent implements OnInit {
 
   ngOnInit() {
     this.checkID();
+    this.setupConfig();
+    this.init();
+  }
+
+  setupConfig(){
     this.checkSeriesType();
     this.highchartsService.init(this.renderType);
     this.baseOpts = createBaseOpts(null, this.element.nativeElement, this.highchartsService);
@@ -58,9 +63,7 @@ export class EADPCommonChartComponent implements OnInit {
     setSeries(this.baseOpts, this.series);
     setChartType(this.baseOpts, this.chartType);
     setChartTitle(this.baseOpts, this.chartTitle);
-    this.init();
   }
-
   checkID(){
     console.log(this.id);
     if(!this.id){
@@ -69,7 +72,8 @@ export class EADPCommonChartComponent implements OnInit {
     }
   }
   checkCharType(){
-    if (this.renderType == RenderType.HIGHSTOCK){
+    console.log(this.renderType);
+    if (this.renderType === RenderType.HIGHSTOCK){
       this.baseOpts.useHighStocks = true;
     }else{
       this.baseOpts.useHighStocks = false;
@@ -77,7 +81,7 @@ export class EADPCommonChartComponent implements OnInit {
   }
 
   checkSeriesType(){
-    if(this.series instanceof TimeSeries){
+    if(this.series && this.series[0] instanceof TimeSeries){
       this.renderType = RenderType.HIGHSTOCK;
       this.type = 'StockChart';
     }else{
@@ -101,8 +105,8 @@ export class EADPCommonChartComponent implements OnInit {
       });
     this.eventBus.on('eadp-chart.render', this.id)
       .subscribe(event => {
-
-        setSeries(this.baseOpts, event.data);
+        this.series = event.data;
+        this.setupConfig();
         this.init();
         console.log(this.chart);
       });
@@ -112,7 +116,6 @@ export class EADPCommonChartComponent implements OnInit {
   private baseOpts: any;
 
   private init() {
-    console.log('init chart');
     this.chart = initChart(this.highchartsService, this.baseOpts, this.type);
     this.registerBroadcastHandler();
   }

@@ -7,6 +7,7 @@ import {
 } from "./reports/pin-event-count/components/eadp-chart/Series";
 import {RenderType, ChartType} from "./reports/pin-event-count/components/eadp-chart/constants";
 import {Http, Response} from "@angular/http";
+import {RangeSelector, RangeSelectorButton} from "./reports/pin-event-count/components/eadp-chart/RangeSelector";
 
 @Component({
   selector: 'app-root',
@@ -17,16 +18,18 @@ export class AppComponent {
   title = 'app works!';
   options: Object;
   xAxis:XAxis[];
+  TSxAxis:XAxis[];
   series: Series[];
   chartType: ChartType;
   pieChartType: ChartType = ChartType.pie;
   tsChartType: ChartType = ChartType.areaspline;
   pieSeries: Series[];
-  tsSereis: Series[];
+  tsSereis: TimeSeries[];
   http:Http;
   basicID:string;
   pieID:string;
   tsID:string;
+  rangeSelector: RangeSelector;
 
   constructor(private eventbus: EventBusService, http: Http) {
     this.http = http;
@@ -49,11 +52,20 @@ export class AppComponent {
     console.log("init finished");
   }
   initTSSeries(data){
+    this.TSxAxis = [];
+    var x = new XAxis();
+    x.title = "time";
+    x.type = "datetime";
+    this.TSxAxis.push(x);
     this.tsSereis = [];
     var currentSeries = new TimeSeries();
     currentSeries.name = 'USD to EUR';
     currentSeries.type = ChartType.area;
     currentSeries.data = data;
+
+    this.rangeSelector = new RangeSelector();
+    var rangButton = new RangeSelectorButton();
+
     this.tsSereis.push(currentSeries);
     this.eventbus.emit('eadp-chart.render', this.tsSereis, this.tsID);
   }
