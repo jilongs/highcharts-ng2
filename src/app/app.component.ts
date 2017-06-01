@@ -7,7 +7,10 @@ import {
 } from "./reports/pin-event-count/components/eadp-chart/Series";
 import {RenderType, ChartType} from "./reports/pin-event-count/components/eadp-chart/constants";
 import {Http, Response} from "@angular/http";
-import {RangeSelector, RangeSelectorButton} from "./reports/pin-event-count/components/eadp-chart/RangeSelector";
+import {
+  RangeSelector, RangeSelectorButton,
+  TimeUnits
+} from "./reports/pin-event-count/components/eadp-chart/RangeSelector";
 
 @Component({
   selector: 'app-root',
@@ -64,7 +67,36 @@ export class AppComponent {
     currentSeries.data = data;
 
     this.rangeSelector = new RangeSelector();
+    this.rangeSelector.buttons = [];
     var rangButton = new RangeSelectorButton();
+    rangButton.type = TimeUnits.MINUTE;
+    rangButton.count = 5;
+    rangButton.text = '5m';
+    this.rangeSelector.buttons.push(rangButton);
+
+    rangButton = new RangeSelectorButton();
+    rangButton.type = TimeUnits.MINUTE;
+    rangButton.count = 15;
+    rangButton.text = '15m';
+    this.rangeSelector.buttons.push(rangButton);
+
+    rangButton.type = TimeUnits.MINUTE;
+    rangButton.count = 30;
+    rangButton.text = '30m';
+    this.rangeSelector.buttons.push(rangButton);
+
+    rangButton.type = TimeUnits.HOUR;
+    rangButton.count = 1;
+    rangButton.text = '1h';
+    this.rangeSelector.buttons.push(rangButton);
+
+    rangButton.type = TimeUnits.ALL;
+    rangButton.text = 'All';
+    this.rangeSelector.buttons.push(rangButton);
+
+    this.rangeSelector.enabled = true;
+    this.rangeSelector.inputEnabled = false;
+    this.rangeSelector.selected= 0;
 
     this.tsSereis.push(currentSeries);
     this.eventbus.emit('eadp-chart.render', this.tsSereis, this.tsID);

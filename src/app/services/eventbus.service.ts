@@ -28,8 +28,8 @@ export class EventBusService {
     on(key:string, target?:string, source?:string):Observable<any> {
         return this._eventBus.asObservable()
             .filter(event => event.key === key)
-            .filter(event => event.target === target || isUndefined(target))
-            .filter(event => event.source === source || isUndefined(source))
+            .filter(event => event.target === target || !target)
+            .filter(event => event.source === source || !source)
             .map(event => event);
     }
 

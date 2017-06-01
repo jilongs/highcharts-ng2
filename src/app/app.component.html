@@ -5,7 +5,12 @@
 <!--<ga-pin-event-count></ga-pin-event-count>-->
 <eadp-chart [(id)]="basicID" [chartTitle]="'Basic Chart'" [xAxis]="xAxis"  [series]="series" [chartType]="chartType" ></eadp-chart>
 <eadp-chart [(id)]="pieID" [chartTitle]="'Pie Chart'" [series]="pieSeries" [chartType]="pieChartType" ></eadp-chart>
-<eadp-chart [(id)]="tsID" [xAxis]="TSxAxis" [chartTitle]="'Time series chart'" [series]="tsSereis" [chartType]="tsChartType" ></eadp-chart>
+<eadp-chart [(id)]="tsID"
+            [xAxis]="TSxAxis"
+            [chartTitle]="'Time series chart'"
+            [series]="tsSereis"
+            [rangeSelector]="rangeSelector"
+            [chartType]="tsChartType" ></eadp-chart>
 
 <pre>{{basicID}}</pre>
 <pre>{{tsChartType}}</pre>
